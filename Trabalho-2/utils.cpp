@@ -1,5 +1,6 @@
-#include "utils.h"
 #include "globals.h"
+#include "riscv.h"
+#include "utils.h"
 #include <fstream>
 
 int mem[MEM_SIZE];
@@ -27,6 +28,12 @@ bool load_mem(const char *file_name, int start)
     }
 
     return true;
+}
+
+void fetch() {
+    ri = lw(pc, 0);
+    pc += 4;
+  
 }
 
 void dump_memory(uint32_t start_byte, uint32_t end_byte, char format)

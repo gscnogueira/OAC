@@ -8,6 +8,9 @@ bool load_mem(const char *file, int start);
 
 void fetch();
 
+void summary();
+void decode();
+
 void dump_memory(uint32_t start_byte, uint32_t end_byte, char format='h');
 
 #endif

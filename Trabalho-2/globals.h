@@ -8,7 +8,6 @@ using namespace std;
 
 #define get_bit(word, index) (word >> index)&1
 #define set_bit(word, index, val) ((word & ~(1 << index)) | ((val&1) << index))
-#define get_field(word, index, mask) (word >> index)&mask
 #define set_field(word, index, mask, value) (word & ~(mask << index)) | (value << index)
 #define MEM_SIZE 4096
 

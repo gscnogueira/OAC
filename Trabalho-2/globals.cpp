@@ -1,6 +1,9 @@
 #include "globals.h"
 
 
+// MEMÓRIA
+int mem[MEM_SIZE];
+
 //
 // banco de registradores do MIPS
 //

@@ -115,6 +115,14 @@ void step() {
     execute();
 }
 
+void run() {
+    while(pc < DATA_SEGMENT_START
+          and not stop_prg){
+        step();
+    }
+  
+}
+
 void summary() {
     printf("opcode : 0x%02x\n", opcode);
     printf("rd     : 0x%02x\n", rd);

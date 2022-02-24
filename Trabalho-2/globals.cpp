@@ -62,6 +62,8 @@ int32_t		imm12_i,				// constante 12 bits
 
 string instr_str[39];
 
+bool stop_prg = false;
+
 void build_dic() {
     instr_str[I_add]	= "ADD";	instr_str[I_addi] = "ADDi";	instr_str[I_and] = "AND";
     instr_str[I_andi]	= "ANDi";	instr_str[I_auipc] = "AUIPC";

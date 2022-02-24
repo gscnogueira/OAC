@@ -83,6 +83,7 @@ enum {
 //
 // Identificacao de tipo de dado
 //
+
 enum DATA_TYPE {
      BYTE=4, INTEGER=1
 };
@@ -96,8 +97,7 @@ enum WORD_SIZE_E {
 
 const WORD_SIZE_E WSIZE = WORD_SIZE;
 
-extern
-int32_t breg[32];
+extern int32_t breg[32];
 
 extern
 uint32_t pc,						// contador de programa
@@ -133,6 +133,10 @@ struct instruction_context_st {
 extern instruction_context_st instr_info;
 
 extern string instr_str[39];
+
+extern instruction_context_st gic;
+
+extern bool stop_prg;
 
 //
 // Funcoes definidas em riscv.cpp

@@ -1,10 +1,16 @@
-simulador: main.o utils.o
-	g++ -o simulador -std=c++17 -Wall main.o utils.o
+simulador: main.o utils.o globals.o riscv.o
+	g++ -o simulador -std=c++17 -Wall main.o utils.o globals.o riscv.o
 
 main.o: main.cpp globals.h utils.h
 	g++ -c main.cpp
 
-utils.o: utils.cpp utils.h globals.h
+globals.o: globals.cpp globals.h
+	g++ -c globals.cpp
+
+riscv.o: globals.h riscv.cpp riscv.h
+	g++ -c riscv.cpp
+
+utils.o: utils.cpp utils.h globals.h riscv.h
 	g++ -c utils.cpp
 
 

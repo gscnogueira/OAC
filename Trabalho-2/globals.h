@@ -10,6 +10,11 @@ using namespace std;
 #define set_bit(word, index, val) ((word & ~(1 << index)) | ((val&1) << index))
 #define get_field(word, index, mask) (word >> index)&mask
 #define set_field(word, index, mask, value) (word & ~(mask << index)) | (value << index)
+#define MEM_SIZE 4096
+
+
+extern int32_t mem[MEM_SIZE];
+
 
 enum OPCODES {
     LUI = 0x37,		AUIPC = 0x17,		// atribui 20 msbits
@@ -71,9 +76,10 @@ extern string reg_str[];
 //
 //	Memory
 //
-enum { MEM_SIZE = 4096 };
-enum { DATA_SEGMENT_START = 0x2000 };
-
+// enum { MEM_SIZE = 4096 };
+enum {
+    TEXT_SEGMENT_START = 0,
+    DATA_SEGMENT_START = 0x2000 };
 //
 // Identificacao de tipo de dado
 //
@@ -132,19 +138,19 @@ extern string instr_str[39];
 // Funcoes definidas em riscv.cpp
 //
 
-void init();
-void fetch (instruction_context_st& ic);
-void decode (instruction_context_st& ic);
-void print_instr(instruction_context_st& ic);
-INSTRUCTIONS get_instr_code(uint32_t opcode, uint32_t func3, uint32_t func7);
-FORMATS get_i_format(uint32_t opcode, uint32_t func3, uint32_t func7);
-void debug_decode(instruction_context_st& ic);
-void dump_breg();
-void dump_asm(int start, int end);
-void dump_mem(int start_byte, int end_byte, char format);
-int load_mem(const char *fn, int start);
-void execute (instruction_context_st& ic);
-void step();
-void run();
+// void init();
+// void fetch (instruction_context_st& ic);
+// void decode (instruction_context_st& ic);
+// void print_instr(instruction_context_st& ic);
+// INSTRUCTIONS get_instr_code(uint32_t opcode, uint32_t func3, uint32_t func7);
+// FORMATS get_i_format(uint32_t opcode, uint32_t func3, uint32_t func7);
+// void debug_decode(instruction_context_st& ic);
+// void dump_breg();
+// void dump_asm(int start, int end);
+// void dump_mem(int start_byte, int end_byte, char format);
+// int load_mem(const char *fn, int start);
+// void execute (instruction_context_st& ic);
+// void step();
+// void run();
 
 #endif

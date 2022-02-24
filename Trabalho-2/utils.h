@@ -9,9 +9,19 @@ bool load_mem(const char *file, int start);
 void fetch();
 
 void summary();
+
 void decode();
 
+void execute();
+
+void step();
+
+void run();
+
 void dump_memory(uint32_t start_byte, uint32_t end_byte, char format='h');
+
+void dump_reg(char format='h');
+
 
 #endif
 // void init();

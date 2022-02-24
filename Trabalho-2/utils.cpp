@@ -51,6 +51,70 @@ void decode() {
     imm21 = get_field(ri, 12, 0x1f); //implementar
 }
 
+void execute()
+{
+    switch (opcode){
+    case AUIPC:
+    {
+        cout<<"auipc"<<endl;
+        break;
+    }
+    case LUI:
+    {
+        cout<<"LUI"<<endl;
+        break;
+    }
+    case ILType:
+    {
+        cout<<"ILType"<<endl;
+        break;
+    }
+    case BType:
+    {
+        cout<<"BType"<<endl;
+        break;
+    }
+    case JAL:
+    {
+        cout<<"JAL"<<endl;
+        break;
+    }
+    case StoreType:
+    {
+        cout<<"StoreType"<<endl;
+        break;
+    }
+    case ILAType:
+    {
+        cout<<"ILAType"<<endl;
+        break;
+    }
+    case RegType:
+    {
+        cout<<"RegType"<<endl;
+        break;
+    }
+    case ECALL:
+    {
+        cout<<"ECALL"<<endl;
+        break;
+    }
+    case JALR:
+    {
+        cout<<"JALR"<<endl;
+        break;
+    }
+    default:
+        cout<<"mano que"<<endl;
+    }
+}
+
+void step() {
+    fetch();
+    decode();
+    execute();
+}
+
 void summary() {
     printf("opcode : 0x%02x\n", opcode);
     printf("rd     : 0x%02x\n", rd);

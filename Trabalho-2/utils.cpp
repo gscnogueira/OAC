@@ -97,6 +97,7 @@ void execute()
     case ECALL:
     {
         cout<<"ECALL"<<endl;
+        ecall();
         break;
     }
     case JALR:
@@ -149,4 +150,28 @@ void dump_memory(uint32_t start_byte, uint32_t end_byte, char format)
         printf("0x%08x | 0x%08x\n",i*4, mem[i]);
     }
     printf("-----------+-----------\n");
+}
+
+void dump_reg(char format)
+{
+    string base_str = format == 'h'? "0x%08x\n" : "%10d\n";
+
+    stringstream ss, ss2;
+    ss << "%s |   %02d   |" << base_str;
+    string format_banco =  ss.str();
+
+
+    ss2 << "PC   |        |" << base_str; 
+    string format_pc    = ss2.str();
+
+
+    printf("Name | Number | Value\n");
+    printf("-----+--------+----------\n");
+    for(int i = 0; i < 32; i++){
+        printf(format_banco.c_str(),
+               reg_str[i].c_str(),
+               i, breg[i]);
+    }
+    printf(format_pc.c_str(), pc);
+
 }

@@ -1,4 +1,5 @@
 #include "riscv.h"
+#include "globals.h"
 
 using namespace std;
 
@@ -45,4 +46,20 @@ void sb(uint32_t address, int32_t kte, int8_t dado)
 	uint32_t endereco = address + kte;
 	int8_t *ptr = (int8_t *) mem;
 	*(ptr + endereco) = dado;
+}
+
+void addi() {
+    breg[rd] = breg[rs1] + imm12_i;
+}
+
+
+void ecall() {
+    switch(breg[A7]){
+    case 10:
+        stop_prg = true;
+        break;
+    default:
+        printf("Instrução ainda não suportada pelo simulador\n");
+    }
+  
 }

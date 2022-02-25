@@ -12,6 +12,8 @@ void summary();
 
 void decode();
 
+void executeILA();
+
 void execute();
 
 void step();

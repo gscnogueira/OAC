@@ -43,4 +43,12 @@ void sw(uint32_t address, int32_t kte, int32_t dado);
 void sb(uint32_t address, int32_t kte, int8_t dado);
 
 
+// FUNÇÕES ARITMÉTICAS
+
+void addi();
+
+// FUNÇÕES DO SISTEMA
+
+void ecall();
+
 #endif

@@ -51,6 +51,22 @@ void decode() {
     imm21 = get_field(ri, 12, 0x1f); //implementar
 }
 
+void executeILA3() {
+    switch(funct3){
+    case ADDI3:
+        addi();
+        break;
+    case ANDI3 :
+        break;
+    case SLLI3:
+        break;
+    case SR3:
+        break;
+    case ORI3:
+        break;
+    }
+}
+
 void execute()
 {
     switch (opcode){
@@ -86,7 +102,7 @@ void execute()
     }
     case ILAType:
     {
-        cout<<"ILAType"<<endl;
+        executeILA3();
         break;
     }
     case RegType:

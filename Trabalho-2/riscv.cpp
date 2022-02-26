@@ -3,6 +3,9 @@
 
 using namespace std;
 
+//
+// FUNÇÕES DE ACESSO À MEMÓRIA
+//
 
 int32_t lw(uint32_t address, int32_t kte)
 {
@@ -48,18 +51,55 @@ void sb(uint32_t address, int32_t kte, int8_t dado)
 	*(ptr + endereco) = dado;
 }
 
-void addi() {
-    breg[rd] = breg[rs1] + imm12_i;
+//
+// FUNÇÕES LÓGICO-ARITMETICAS COM IMEDIATO
+//
+
+
+//
+// JAL
+//
+
+void jal() {
+    breg[rd] = pc;
+    // printf("vai somar %d", imm21);
+    pc += imm21 -4 ;
 }
 
 
-void ecall() {
-    switch(breg[A7]){
-    case 10:
-        stop_prg = true;
+//
+// BRANCHES
+//
+
+void beq() {
+    pc = breg[rs1] == rs2 ? pc + imm13 -4 : pc;
+}
+//
+// ECALL
+//
+
+void print_str() {
+    uint32_t addres = breg[A0];
+    char* blau = (char *) mem + addres;
+    printf("%s", blau);
+}
+
+void print_int() {
+    printf("%d", breg[A0]);
+}
+
+void ecall()
+{
+	switch (breg[A7]) {
+	case 10:
+		stop_prg = true;
+		break;
+    case 4:
+        print_str();
         break;
-    default:
-        printf("Instrução ainda não suportada pelo simulador\n");
-    }
-  
+	case 1:
+		print_int();
+        break;
+	}
+
 }

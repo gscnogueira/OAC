@@ -4,6 +4,9 @@
 #include <bits/stdc++.h>
 #include "globals.h"
 
+
+void init();
+
 bool load_mem(const char *file, int start);
 
 void fetch();
@@ -18,7 +21,7 @@ void execute();
 
 void step();
 
-void run();
+void run(bool summ=false, bool dump=false);
 
 void dump_memory(uint32_t start_byte, uint32_t end_byte, char format='h');
 

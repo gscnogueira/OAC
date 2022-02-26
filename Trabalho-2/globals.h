@@ -84,7 +84,7 @@ enum {
 //
 
 enum DATA_TYPE {
-     BYTE=4, INTEGER=1
+    BYTE=4, INTEGER=1, WORD=32
 };
 
 //

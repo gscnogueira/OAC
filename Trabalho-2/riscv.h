@@ -21,16 +21,12 @@ using namespace std;
 #define get_byte_2(w) ((w>>16) & 0xFF)
 #define get_byte_3(w) ((w>>24) & 0xFF)
 
-
 // init instruction strings
 void build_dic();
 
 //
-// identificacao dos registradores do banco do RV32I
-//
-
-
 // FUNÇÕES DE ACESSO À MEMÓRIA
+//
 
 int32_t lw(uint32_t address, int32_t kte);
 
@@ -42,13 +38,62 @@ void sw(uint32_t address, int32_t kte, int32_t dado);
 
 void sb(uint32_t address, int32_t kte, int8_t dado);
 
+//
+// FUNÇÕES LÓGICO-ARITMETICAS COM IMEDIATO
+//
 
-// FUNÇÕES ARITMÉTICAS
+inline void addi() {breg[rd] = breg[rs1] + imm12_i;}
 
-void addi();
+inline void andi() {breg[rd] = breg[rs1] & imm12_i;}
 
+void slli();
+
+void srai();
+
+void srli();
+
+void ori();
+
+//
+// AUIPC
+//
+
+inline void auipc() {breg[rd] = pc -4  + imm20_u;};
+
+//
+// JAL
+//
+
+void jal();
+
+//
+// JALR
+//
+
+void jalr();
+
+//
+// BRANCHES
+//
+
+void beq();
+
+void bne();
+
+void bge();
+
+void bgeu();
+
+void blt();
+
+void bltu();
+
+//
 // FUNÇÕES DO SISTEMA
+//
+
 
 void ecall();
+
 
 #endif

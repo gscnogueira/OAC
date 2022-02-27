@@ -56,6 +56,18 @@ int get_imm12_i(uint32_t ri)
 	return imm12_i;
 }
 
+int get_imm12_s(uint32_t ri) {
+    int bit_11_5 = get_field(ri, 25, 0X7F);
+    int bit_4_0  = get_field(ri, 7, 0x1F);
+
+    bit_11_5 <<= 5;
+
+    int imm12_s = bit_11_5 | bit_4_0;
+    imm12_s = extend_sign(imm12_s, 12);
+
+    return imm12_s;
+}
+
 int get_imm13(uint32_t ri)
 {
     int bit_12   = get_field(ri, 31, 1);
@@ -107,12 +119,12 @@ void decode()
 	rd      = get_field(ri, 7, 0x1F);
 	rs1     = get_field(ri, 15, 0x1F);
 	rs2     = get_field(ri, 20, 0x1F);
-	shamt   = get_field(ri, 20, 0x1F);	// implementar
+	shamt   = get_field(ri, 20, 0x1F);
 	funct3  = get_field(ri, 12, 0x07);
 	funct7  = get_field(ri, 25, 0x7F);
 
 	imm12_i = get_imm12_i(ri);
-	imm12_s = get_field(ri, 20, 0xFFF);
+	imm12_s = get_imm12_s(ri);
     imm20_u = get_imm20_u(ri);
 	imm13   = get_imm13(ri);
 	imm21   = get_imm21(ri);
@@ -125,14 +137,24 @@ void execILAType()
 		addi();
 		break;
 	case ANDI3:
+        andi();
 		break;
 	case SLLI3:
-		break;
-	case SR3:
+        slli();
 		break;
 	case ORI3:
+        ori();
 		break;
-	}
+	case SR3:
+        switch (funct7) {
+        case SRAI7:
+            srai();
+            break;
+        case SRLI7:
+            srli();
+            break;
+        }
+    }
 }
 
 void execILType() {
@@ -155,16 +177,62 @@ void execBType() {
         beq();
         break;
     case BNE3:
+        bne();
         break;
     case BLT3:
+        blt();
         break;
     case BGE3:
+        bge();
         break;
     case BLTU3:
+        bltu();
         break;
     case BGEU3:
+        bgeu();
         break;
     }
+}
+
+void execRegType() {
+  switch (funct3) {
+  case ADDSUB3:
+    switch (funct7) {
+    case ADD7:
+        add();
+        break;
+    case SUB7:
+        sub();
+        break;
+    }
+      break;
+  case XOR3:
+      xor_();
+      break;
+  case AND3:
+      and_();
+      break;
+  case OR3:
+      or_();
+      break;
+  case SLT3:
+      slt();
+      break;
+  case SLTU3:
+      sltu();
+      break;
+  }
+}
+
+void execStoreType() {
+  switch (funct3) {
+  case SW3:
+      sw(breg[rs1], imm12_s,breg[rs2]);
+      break;
+  case SB3:
+      sb(breg[rs1], imm12_s,breg[rs2]);
+      break;
+  }
 }
 
 void execute()
@@ -174,7 +242,7 @@ void execute()
         auipc();
 		break;
 	case LUI:
-		cout << "LUI" << endl;
+        lui();
 		break;
     case ILType: {
         execILType();
@@ -187,22 +255,20 @@ void execute()
         jal();
 		break;
 	case StoreType:
-		cout << "StoreType" << endl;
+        execStoreType();
 		break;
 	case ILAType:
 		execILAType();
 		break;
 	case RegType:
-		cout << "RegType" << endl;
+        execRegType();
 		break;
 	case ECALL:
 		ecall();
 		break;
 	case JALR:
-		cout << "JALR" << endl;
+        jalr();
 		break;
-	default:
-		cout << "mano que" << endl;
 	}
 
     breg[ZERO] = 0;
@@ -220,6 +286,7 @@ void run(bool summ, bool dump)
 	while (pc < DATA_SEGMENT_START and not stop_prg) {
 		step();
         if (summ) {
+            summary();
             getchar();
         }
         if(dump){
@@ -239,7 +306,7 @@ void summary()
 	printf("shamt  : 0x%08x\n", shamt);
 	printf("funct3 : 0x%01x\n", funct3);
 	printf("funct7 : 0x%02x\n", funct7);
-	printf("imm12_i: 0x%03x\n", imm12_i);
+	printf("imm12_i: 0x%03d\n", imm12_i);
 	printf("imm12_s: 0x%03x\n", imm12_s);
 	printf("lmm13  : 0x%04x\n", imm13);
 	printf("imm20_u: 0x%04x\n", imm20_u);

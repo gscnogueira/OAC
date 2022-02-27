@@ -3,7 +3,7 @@ word:	.word 0xFAFEF1F0
 
 TAB: 	.asciz "\t"
 NL: 	.asciz	"\n"
-Label:	.asciz "Teste"
+Label:	.asciz "Teste "
 l_ok:	.asciz	" OK"
 l_fail:	.asciz	" FAIL"
 

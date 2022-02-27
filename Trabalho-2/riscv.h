@@ -1,12 +1,3 @@
-/*
- *  riscv.h
- *  RV32I
- *
- *  Created by Ricardo Jacobi on 17/09/19.
- *  Copyright 2019 Universidade de Brasilia / York. All rights reserved.
- *
- */
-
 #ifndef __RISCV_H__
 #define __RISCV_H__
 
@@ -42,33 +33,87 @@ void sb(uint32_t address, int32_t kte, int8_t dado);
 // FUNÇÕES LÓGICO-ARITMETICAS COM IMEDIATO
 //
 
-inline void addi() {breg[rd] = breg[rs1] + imm12_i;}
+inline void addi()
+{
+	breg[rd] = breg[rs1] + imm12_i;
+}
 
-inline void andi() {breg[rd] = breg[rs1] & imm12_i;}
+inline void andi()
+{
+	breg[rd] = breg[rs1] & imm12_i;
+}
 
-void slli();
+inline void slli() {
+    breg[rd] = breg[rs1] << shamt;
+}
 
-void srai();
+inline void srai() {
+    breg[rd] = breg[rs1] >> shamt;
+}
 
-void srli();
+inline void srli() {
+    breg[rd] = ((uint32_t) breg[rs1] ) >> shamt;
+}
 
-void ori();
 
+inline void ori() {
+    breg[rd] = breg[rs1] | imm12_i;
+}
+
+//
+//REGType INSTRUCTIONS
+//
+
+inline void add() {
+    breg[rd] = breg[rs1] + breg[rs2];
+}
+
+inline void sub() {
+    breg[rd] = breg[rs1] - breg[rs2];
+}
+
+inline void and_() {
+    breg[rd] = breg[rs1] & breg[rs2];
+}
+
+inline void or_() {
+    breg[rd] = breg[rs1] | breg[rs2];
+};
+
+inline void xor_() {
+    breg[rd] = breg[rs1] ^ breg[rs2];
+  
+}
+
+inline void sltu() {
+    breg[rd] = ((uint32_t) breg[rs1] ) < ((uint32_t) breg[rs2] ) ? 1 : 0;
+};
+
+inline void slt() {
+    breg[rd] =  breg[rs1] < breg[rs2] ? 1 : 0;
+};
+
+//
+// LUI
+//
+
+inline void lui() {
+    breg[rd] = imm20_u;
+}
 //
 // AUIPC
 //
 
-inline void auipc() {breg[rd] = pc -4  + imm20_u;};
+inline void auipc()
+{
+	breg[rd] = pc - 4 + imm20_u;
+}
 
 //
-// JAL
+// JUMPS
 //
 
 void jal();
-
-//
-// JALR
-//
 
 void jalr();
 
@@ -76,24 +121,42 @@ void jalr();
 // BRANCHES
 //
 
-void beq();
+inline void beq()
+{
+	pc = breg[rs1] == breg[rs2] ? pc + imm13 - 4 : pc;
+};
 
-void bne();
+inline void bne()
+{
+	pc = breg[rs1] != breg[rs2] ? pc + imm13 - 4 : pc;
+};
 
-void bge();
+inline void bge()
+{
+	pc = breg[rs1] >= breg[rs2] ? pc + imm13 - 4 : pc;
+};
 
-void bgeu();
+inline void bgeu()
+{
+	pc = ((uint32_t) breg[rs1]) >= ((uint32_t) breg[rs2]) ?
+	    pc + imm13 - 4 : pc;
+};
 
-void blt();
+inline void blt()
+{
+	pc = breg[rs1] < breg[rs2] ? pc + imm13 - 4 : pc;
+};
 
-void bltu();
+inline void bltu()
+{
+	pc = ((uint32_t) breg[rs1]) < ((uint32_t) breg[rs2]) ?
+	    pc + imm13 - 4 : pc;
+};
 
 //
 // FUNÇÕES DO SISTEMA
 //
 
-
 void ecall();
-
 
 #endif

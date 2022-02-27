@@ -55,33 +55,29 @@ void sb(uint32_t address, int32_t kte, int8_t dado)
 // FUNÇÕES LÓGICO-ARITMETICAS COM IMEDIATO
 //
 
-
 //
-// JAL
+// JUMPS
 //
 
 void jal() {
     breg[rd] = pc;
-    // printf("vai somar %d", imm21);
     pc += imm21 -4 ;
-}
+};
 
 
-//
-// BRANCHES
-//
-
-void beq() {
-    pc = breg[rs1] == rs2 ? pc + imm13 -4 : pc;
+void jalr() {
+    breg[rd] = pc;
+    pc = breg[rs1] + imm12_i;
+  
 }
 //
 // ECALL
 //
 
 void print_str() {
-    uint32_t addres = breg[A0];
-    char* blau = (char *) mem + addres;
-    printf("%s", blau);
+    uint32_t address = breg[A0];
+    char* str = (char *) mem + address;
+    printf("%s", str);
 }
 
 void print_int() {

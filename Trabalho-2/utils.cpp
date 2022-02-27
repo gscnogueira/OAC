@@ -271,13 +271,24 @@ void summary()
 
 void dump_memory(uint32_t start_byte, uint32_t end_byte, char format)
 {
+    if (start_byte % 4 or end_byte % 4) {
+        printf("Endereço de memória inválido\n");
+        return;
+    }
+
+	string base_str = format == 'h' ? "0x%08x\n" : "%10d\n";
+
 	int start_intex = start_byte / 4;
 	int end_index = end_byte / 4;
 
-	printf("  Address  |   Value\n");
+	stringstream ss;
+	ss << "0x%08x |" << base_str;
+	string format_mem = ss.str();
+
+	printf("  Address  |  Value\n");
 	printf("-----------+-----------\n");
 	for (int i = start_intex; i <= end_index; i++) {
-		printf("0x%08x | 0x%08x\n", i * 4, mem[i]);
+		printf(format_mem.c_str(), i * 4, mem[i]);
 	}
 	printf("-----------+-----------\n");
 }

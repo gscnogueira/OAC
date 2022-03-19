@@ -21,25 +21,41 @@ mat2: .byte 0:255
 heap: .word 0x00003000
 display_size: .word 0x400
 cor: .word 0x008be9fd
-
+msg: .string "nao valido\n"
 .text
 
 la a2, mat1
 li a0, 15
-li a1, 15
+li a1, -1
 
 
-call write
-
-mv a0, a2
-
-call plotm
+call readm
+call print
 
 
 j exit
 
 #-------------------------------------
 readm:
+	li t0, 15
+	mv t1, zero
+	# i < 0:
+	sltz t2, a0  
+	or t1, t1, t2
+	# j < 0:
+	sltz t2, a1
+	or t1, t1, t2
+	# i > 15:
+	sgt t2, a0, t0
+	or t1, t1, t2
+	# j > 15:
+	sgt t2, a1, t0
+	or t1, t1, t2
+	
+	beqz t1, valido
+	mv a0, zero
+	ret	
+valido:	
 	# obter posição relativa da linha:
 	slli t0, a0, 4
 	# obter posição relativa da coluna:
@@ -102,6 +118,33 @@ pinta_pixel:
 	sw s1, 0(s0)
 ppend:	ret
 		
+#-------------------------------------
+max:
+	bge a0, a1, a0_maior
+a1_maior:
+	mv a0, a1
+a0_maior:
+	ret	
+#-------------------------------------
+min:
+	ble a0, a1, a0_menor
+a1_menor:
+	mv a0, a1
+a0_menor:
+	ret	
+	
+#-------------------------------------
+conta_vizinhanca:
+# Parâmetros:
+# a0: i
+# a1: j
+# a2: matrix
+# Retorno 
+# a0: numero de celulas vizinhas à ceulula localizada em matrix[i][j]
+	
+	
+	
+	
 #-------------------------------------	
 exit:
 	li a7, 10
@@ -110,4 +153,7 @@ print:
 	li a7, 1
 	ecall
 	ret
+error:
+	
+	
 	

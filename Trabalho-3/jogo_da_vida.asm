@@ -169,9 +169,107 @@ conta_vizinhanca:
 # a0: numero de celulas vizinhas à ceulula localizada em matrix[i][j]
 	
 	
+	mv s0, zero 	# incializa contador
+	addi s1, a0, -1 # i-1
+	addi s2, a0, 0  # i
+	addi s3, a0, 1	# i+1
+	addi s4, a1, -1 # j-1
+	addi s5, a1, 0  # j
+	addi s6, a1, 1  # j+1
 	
+	addi sp, sp, -4
+	sw ra, 0(sp)
+	# [i-1][j-1]
+	mv a0, s1
+	mv a1, s4
+	call readm
+	add s0, s0, a0
+	# [i-1][j]
+	mv a0, s1
+	mv a1, s5
+	call readm
+	add s0, s0, a0
+	# [i-1][j+1]
+	mv a0, s1
+	mv a1, s6
+	call readm
+	add s0, s0, a0
+	# [i][j-1]
+	mv a0, s2
+	mv a1, s4
+	call readm
+	add s0, s0, a0
+	# [i][j+1]
+	mv a0, s2
+	mv a1, s6
+	call readm
+	add s0, s0, a0
+	# [i+1][j-1]
+	mv a0, s3
+	mv a1, s4
+	call readm
+	add s0, s0, a0
+	# [i+1][j]
+	mv a0, s3
+	mv a1, s5
+	call readm
+	add s0, s0, a0
+	# [i+1][j+1]
+	mv a0, s3
+	mv a1, s6
+	call readm
+	add s0, s0, a0
+	mv a0, s0
+
+	lw ra, 0(sp)
+	addi sp, sp, 4
+	ret	
+#-------------------------------------
+evoului:
+# Parâmetros:
+# a0: i
+# a1: j
+# a2: matrix
+# Retorno 
+# a0: novo valor do ponto(i,j)
+
+	addi sp, sp, -12
+	sw ra, 0(sp)
+	sw a0, 4(sp)
+	sw a1, 8(sp)
 	
-#-------------------------------------	
+	call conta_vizinhanca
+	mv t0, a0
+	lw a0, 4(sp)
+	lw a1, 8(sp)
+	mv a2, a3
+	
+	beqz t0, nasce
+	li t1, 1
+	sgt t1, t0, t1 # checa se tem mais de um vizinho
+	slti t2, t0, 4 # checa se tem menos de 4 vizinhos
+	and t1, t1, t2  # checa se das duas condições são satisfeitas
+	beqz t1, morre
+sobrevive:
+	j fim_evolui
+morre:
+	call write
+	j fim_evolui
+nasce:
+	li t1, 3
+	bne t0, t1, fim_evolui
+	call write
+	j fim_evolui
+	
+fim_evolui:	
+	lw ra, 0(sp)
+	addi, sp, sp, 12
+	ret
+#-------------------------------------
+step:
+	
+#-------------------------------------
+
 exit:
 	li a7, 10
 	ecall

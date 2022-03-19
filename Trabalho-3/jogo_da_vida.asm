@@ -24,8 +24,14 @@ cor: .word 0x008be9fd
 
 .text
 
-la a0, mat1
+la a2, mat1
+li a0, 15
+li a1, 15
 
+
+call write
+
+mv a0, a2
 
 call plotm
 
@@ -34,13 +40,27 @@ j exit
 
 #-------------------------------------
 readm:
+	# obter posição relativa da linha:
 	slli t0, a0, 4
-	# obter posição relativa à linha:
+	# obter posição relativa da coluna:
 	add t0,t0, a1  
-	# obter posição relativa à coluna:
+	
 	add t0, t0, a2 
 	lb a0, 0(t0)
 	ret
+#-------------------------------------
+write:
+	# obter posição relativa da linha:
+	slli t0, a0, 4
+	# obter posição relativa da coluna:
+	add t0,t0, a1  
+	
+	add t0, t0, a2 
+	lb a0, 0(t0)
+	xori a0, a0, 1
+	sb a0, 0(t0)		
+	ret
+	
 #-------------------------------------
 plotm:
 	lw s0, heap # carrega endereço do display

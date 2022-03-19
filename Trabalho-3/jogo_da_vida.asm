@@ -80,15 +80,16 @@ write:
 #-------------------------------------
 plotm:
 	lw s0, heap # carrega endereço do display
-	lw s1, cor  	# carrega cor
-	li s2, 0x10 # altura da matriz
+	lw s1, cor_viva
+	lw s2, cor_morta  	# carrega cor
+	li s3, 0x10 # altura da matriz
 	# Inicializa contador
-	mv s3, zero
-loopi:
-	bge s3, s2, endi
 	mv s4, zero
+loopi:
+	bge s4, s3, endi
+	mv s5, zero
 loopj:
-	bge s4, s2 endj
+	bge s5, s3 endj
 	addi sp, sp, -8
 	sw a0, 0(sp)
 	sw ra, 4(sp)
@@ -97,25 +98,28 @@ loopj:
 	lw ra, 4(sp)
 	addi sp, sp 8
 	addi s0, s0, 4
-	addi s4, s4, 1
+	addi s5, s5, 1
 	j loopj
 endi:
 	ret
 endj:
-	addi s3, s3, 1
+	addi s4, s4, 1
 	j loopi	
 
 pinta_pixel:
 	addi sp, sp, -4
 	sw ra, 0(sp)
 	mv a2, a0
-	mv a1, s4
-	mv a0, s3
+	mv a1, s5
+	mv a0, s4
 	call readm
 	lw ra, 0(sp)
 	addi sp, sp, 4
-	beqz a0, ppend
+	beqz a0, pinta_morta
 	sw s1, 0(s0)
+	j ppend
+pinta_morta:
+	sw s2, 0(s0)
 ppend:	ret
 		
 #-------------------------------------

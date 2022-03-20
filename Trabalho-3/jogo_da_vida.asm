@@ -27,7 +27,7 @@ cor_morta: .word 0x44475a
 
 la a0, mat1
 la a1, mat2
-li s0, 20	# numero de iterações
+li s0, 40	# numero de iterações
 li s1, 0 	#contador
 main_loop:
 	bge s1, s0, end_main
@@ -38,9 +38,9 @@ main_loop:
 
 	call plotm
 	
-	# pausa programa por 3 segundos
+	# pausa programa por 1 segundos
 	mv t1, a0
-	li a0, 3000 
+	li a0, 500 
 	li a7, 32
 	ecall
 	mv a0, t1
@@ -265,9 +265,8 @@ evolui:
 # Parâmetros:
 # a0: i
 # a1: j
-# a2: matrix
-# Retorno 
-# a0: novo valor do ponto(i,j)
+# a2: matrix original
+# a3: copia da matriz original
 	
 	addi sp, sp, -20
 	sw ra, 0(sp)

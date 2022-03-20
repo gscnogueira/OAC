@@ -16,40 +16,60 @@ mat1: .byte
 	0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 	0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 	0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+	
 mat2: .byte 0:255 
-
 heap: .word 0x00003000
 display_size: .word 0x400
 cor_viva: .word 0x008be9fd
 cor_morta: .word 0x44475a
-msg: .string "nao valido\n"
+
 .text
 
 la a0, mat1
-call plotm
-
-
-
-la a0, mat1
 la a1, mat2
-call copy
+li s0, 20	# numero de iterações
+li s1, 0 	#contador
+main_loop:
+	bge s1, s0, end_main
+	
+	addi sp, sp, -8
+	sw s0, 0(sp)
+	sw s1, 4(sp)
 
-la a0, mat1
-la a1, mat2
-call step
+	call plotm
+	
+	# pausa programa por 3 segundos
+	mv t1, a0
+	li a0, 3000 
+	li a7, 32
+	ecall
+	mv a0, t1
+	
+	call copy
+	
+	lw s0, 0(sp)
+	lw s1, 4(sp)
+	
+	call step 
+	
+	lw s0, 0(sp)
+	lw s1, 4(sp)
+	addi sp, sp, 8
+	mv t1, a0
+	mv a0, a1
+	mv a1, t1
+	addi, s1, s1, 1
+	j main_loop
+end_main:
+	j exit
 
-#li a7, 	32
-#li a0, 1000
-#ecall
 
-la a0, mat2
-call plotm
-
-
-
-j exit
 #-------------------------------------
 copy:
+	addi sp, sp, -8
+	sw a0, 0(sp)
+	sw a1, 4(sp)
+	
 	li t0, 64
 	mv t1, zero
 loop:
@@ -61,6 +81,9 @@ loop:
 	addi a1, a1, 4
 	j loop
 end_loop:
+	lw a0, 0(sp)
+	lw a1, 4(sp)
+	addi sp, sp, 8
 	ret
 #-------------------------------------
 readm:
@@ -112,6 +135,10 @@ plotm:
 	li s3, 0x10 # altura da matriz
 	# Inicializa contador
 	mv s4, zero
+	addi sp, sp, -12
+	sw a0, 0(sp)
+	sw a1, 4(sp)
+	sw a2, 8(sp)
 loopi:
 	bge s4, s3, endi
 	mv s5, zero
@@ -128,6 +155,10 @@ loopj:
 	addi s5, s5, 1
 	j loopj
 endi:
+	lw a0, 0(sp)
+	lw a1, 4(sp)
+	lw a2, 8(sp)
+	addi sp, sp, 12
 	ret
 endj:
 	addi s4, s4, 1
@@ -237,7 +268,7 @@ evolui:
 # a2: matrix
 # Retorno 
 # a0: novo valor do ponto(i,j)
-
+	
 	addi sp, sp, -20
 	sw ra, 0(sp)
 	sw a0, 4(sp)
@@ -255,6 +286,7 @@ evolui:
 	mv s1, a0
 	lw a0, 4(sp)
 	lw a1, 8(sp)
+	
 	#ebreak
 	
 	mv a2, a3
@@ -285,6 +317,10 @@ fim_evolui:
 	ret
 #-------------------------------------
 step:
+	
+	addi, sp, sp, -8
+	sw a0, 0(sp)
+	sw a1, 4(sp)
 	mv a2, a0
 	mv a3, a1
 	li t0, 16
@@ -313,6 +349,9 @@ end_stepj:
 end_stepi:
 	lw ra, 0(sp)
 	addi sp, sp, 16
+	lw a0, 0(sp)
+	lw a1, 4(sp)
+	addi sp, sp, 8
 	ret
 	
 #-------------------------------------

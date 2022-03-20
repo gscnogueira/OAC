@@ -25,21 +25,42 @@ cor_morta: .word 0x44475a
 msg: .string "nao valido\n"
 .text
 
+
+
 la a0, mat1
-#la a1, mat2
-#call copy
-
-#la, a0, mat2
-
 call plotm
 
-mv a2, a0
-li a0, 1
-li a1, 0
+li a7, 32
+li a0, 1000
+ecall 
 
+la a0, mat1
+la a1, mat2
+call copy
+
+la a2, mat1
+la a3, mat2
+li a0, 5
+li a1, 12
 
 call conta_vizinhanca
 call print
+
+la a2, mat1
+la a3, mat2
+li a0, 5
+li a1, 12
+
+
+call evolui 
+
+la a0, mat2
+call plotm
+
+
+
+
+
 
 
 j exit
@@ -225,7 +246,7 @@ conta_vizinhanca:
 	addi sp, sp, 4
 	ret	
 #-------------------------------------
-evoului:
+evolui:
 # Parâmetros:
 # a0: i
 # a1: j
@@ -239,15 +260,20 @@ evoului:
 	sw a1, 8(sp)
 	
 	call conta_vizinhanca
-	mv t0, a0
+	mv s0, a0
 	lw a0, 4(sp)
 	lw a1, 8(sp)
-	mv a2, a3
 	
-	beqz t0, nasce
+	call readm
+	mv s1, a0
+	lw a0, 4(sp)
+	lw a1, 8(sp)
+	
+	mv a2, a3
+	beqz s1, nasce
 	li t1, 1
-	sgt t1, t0, t1 # checa se tem mais de um vizinho
-	slti t2, t0, 4 # checa se tem menos de 4 vizinhos
+	sgt t1, s0, t1 # checa se tem mais de um vizinho
+	slti t2, s0, 4 # checa se tem menos de 4 vizinhos
 	and t1, t1, t2  # checa se das duas condições são satisfeitas
 	beqz t1, morre
 sobrevive:
@@ -257,7 +283,7 @@ morre:
 	j fim_evolui
 nasce:
 	li t1, 3
-	bne t0, t1, fim_evolui
+	bne s0, t1, fim_evolui
 	call write
 	j fim_evolui
 	

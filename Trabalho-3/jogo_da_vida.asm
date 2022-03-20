@@ -1,3 +1,11 @@
+# Autor: Gabriel da Silva Corvino Nogueira
+# Matrícula: 180113330
+# Email: 180113330@aluno.unb.br
+# Disciplina: CIC0099 - Organização e Arquitetura de computadores
+# Professor: Ricardo Puzzuol Jacobi
+# Turma: C
+# SISTEMA OPERACIONAL: GNU/Linux kernel 5.15.11-arch2-1
+# IDE: Emacs 27.2
 .data
 mat1: .byte
 	0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0

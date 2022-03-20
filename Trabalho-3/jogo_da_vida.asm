@@ -25,41 +25,25 @@ cor_morta: .word 0x44475a
 msg: .string "nao valido\n"
 .text
 
-
-
 la a0, mat1
 call plotm
 
-li a7, 32
-li a0, 1000
-ecall 
+
 
 la a0, mat1
 la a1, mat2
 call copy
 
-la a2, mat1
-la a3, mat2
-li a0, 5
-li a1, 12
+la a0, mat1
+la a1, mat2
+call step
 
-call conta_vizinhanca
-call print
-
-la a2, mat1
-la a3, mat2
-li a0, 5
-li a1, 12
-
-
-call evolui 
+#li a7, 	32
+#li a0, 1000
+#ecall
 
 la a0, mat2
 call plotm
-
-
-
-
 
 
 
@@ -254,20 +238,24 @@ evolui:
 # Retorno 
 # a0: novo valor do ponto(i,j)
 
-	addi sp, sp, -12
+	addi sp, sp, -20
 	sw ra, 0(sp)
 	sw a0, 4(sp)
 	sw a1, 8(sp)
+	sw a2, 12(sp)
+	sw a3, 16(sp)
 	
 	call conta_vizinhanca
 	mv s0, a0
 	lw a0, 4(sp)
 	lw a1, 8(sp)
 	
+	
 	call readm
 	mv s1, a0
 	lw a0, 4(sp)
 	lw a1, 8(sp)
+	#ebreak
 	
 	mv a2, a3
 	beqz s1, nasce
@@ -289,10 +277,43 @@ nasce:
 	
 fim_evolui:	
 	lw ra, 0(sp)
-	addi, sp, sp, 12
+	lw a0, 4(sp)
+	lw a1, 8(sp)
+	lw a2, 12(sp)
+	lw a3, 16(sp)
+	addi, sp, sp, 20
 	ret
 #-------------------------------------
 step:
+	mv a2, a0
+	mv a3, a1
+	li t0, 16
+	mv t1, zero
+	addi sp, sp, -16
+	sw ra, 0(sp)
+stepi:	
+	bge t1, t0, end_stepi
+	mv t2, zero
+stepj:
+	bge t2, t0, end_stepj
+	sw t0, 4(sp)
+	sw t1, 8(sp)
+	sw t2, 12(sp)
+	mv a0, t1
+	mv a1, t2
+	call evolui
+	lw t0, 4(sp)
+	lw t1, 8(sp)
+	lw t2, 12(sp)
+	addi t2,t2,  1
+	j stepj
+end_stepj:
+	addi t1, t1, 1
+	j stepi
+end_stepi:
+	lw ra, 0(sp)
+	addi sp, sp, 16
+	ret
 	
 #-------------------------------------
 

@@ -88,7 +88,7 @@ package riscv_pkg is
   end component;
 
   component pc is
-    generic(SIZE : natural := 32);
+    generic(WORD_SIZE : natural := 32);
     port(
       clk   : in  std_logic;
       wren  : in  std_logic;

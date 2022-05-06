@@ -9,15 +9,14 @@ use work.riscv_pkg.all;
 entity controle_ula is
   port(
     alu_op : in  std_logic_vector(1 downto 0);
-    funct  : in  std_logic_vector(3 downto 0);
+    funct3  : in  std_logic_vector(2 downto 0);
+    funct7  : in  std_logic;
     opcode : out std_logic_vector(3 downto 0));
 end entity controle_ula;
 
 architecture rtl of controle_ula is
-  signal funct3 : std_logic_vector(2 downto 0);
-  signal funct7 : std_logic;
 begin
-  process(alu_op, funct)
+  process(alu_op, funct3, funct7)
   begin
     case(alu_op) is
       when "00" => opcode <= ULA_ADD;

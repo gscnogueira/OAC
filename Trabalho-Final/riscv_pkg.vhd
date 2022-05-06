@@ -6,7 +6,7 @@ use ieee.numeric_std.all;
 package riscv_pkg is
 
   constant IMEM_SIZE : integer                                := 1024;
-  constant IMEM_ADDR : integer                                := 8;
+  constant IMEM_ADDR : integer                                := 12;
   constant WORD_SIZE : natural                                := 32;
   constant BREG_IDX  : natural                                := 5;
   constant ZERO32    : std_logic_vector(WORD_SIZE-1 downto 0) := (others => '0');
@@ -171,18 +171,32 @@ package riscv_pkg is
       );
   end component;
 
+  -- component control is
+  --   port (
+  --     opcode  : in  std_logic_vector(5 downto 0);
+  --     op_ula  : out std_logic_vector(1 downto 0);
+  --     reg_dst,
+  --     branch,
+  --     is_bne,
+  --     jump,
+  --     mem2reg,
+  --     mem_wr,
+  --     alu_src,
+  --     breg_wr : out std_logic
+  --     );
+  -- end component;
+
+
   component control is
-    port (
-      opcode  : in  std_logic_vector(5 downto 0);
-      op_ula  : out std_logic_vector(1 downto 0);
-      reg_dst,
-      branch,
-      is_bne,
-      jump,
-      mem2reg,
-      mem_wr,
-      alu_src,
-      breg_wr : out std_logic
+    port(
+      opcode     : in  std_logic_vector(6 downto 0);
+      alu_op     : out std_logic_vector(1 downto 0);
+      branch     : out std_logic;
+      mem_read   : out std_logic;
+      mem_to_reg : out std_logic;
+      mem_write  : out std_logic;
+      alu_src    : out std_logic;
+      reg_write  : out std_logic
       );
   end component;
 

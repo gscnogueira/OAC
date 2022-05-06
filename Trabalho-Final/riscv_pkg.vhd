@@ -79,115 +79,78 @@ package riscv_pkg is
   -- Aliases
 
   component rv_uniciclo is
-    port
-      (
-        clk     : in  std_logic;
-        clk_rom : in  std_logic;
-        rst     : in  std_logic;
-        data    : out std_logic_vector(WORD_SIZE-1 downto 0)
-        );
+    port(
+      clk     : in  std_logic;
+      clk_rom : in  std_logic;
+      rst     : in  std_logic;
+      data    : out std_logic_vector(WORD_SIZE-1 downto 0)
+    );
   end component;
 
-  component reg is
-    generic (
-      SIZE : natural := 32
-      );
-    port
-      (
-        clk   : in  std_logic;
-        wren  : in  std_logic;
-        rst   : in  std_logic;
-        d_in  : in  std_logic_vector(WORD_SIZE-1 downto 0);
-        d_out : out std_logic_vector(WORD_SIZE-1 downto 0)
-        );
+  component pc is
+    generic(SIZE : natural := 32);
+    port(
+      clk   : in  std_logic;
+      wren  : in  std_logic;
+      rst   : in  std_logic;
+      d_in  : in  std_logic_vector(WORD_SIZE-1 downto 0);
+      d_out : out std_logic_vector(WORD_SIZE-1 downto 0)
+    );
   end component;
 
   component mux_2 is
-    generic (
-      SIZE : natural := 32
-      );
+    generic (WORD_SIZE : natural := 32);
     port (
-      in0, in1 : in  std_logic_vector(SIZE-1 downto 0);
       sel      : in  std_logic;
-      m_out    : out std_logic_vector(SIZE-1 downto 0)
+      in0, in1 : in  std_logic_vector(WORD_SIZE-1 downto 0);
+      m_out    : out std_logic_vector(WORD_SIZE-1 downto 0)
       );
   end component;
 
   component adder is
-    generic (
-      DATA_WIDTH : natural := WORD_SIZE
-      );
+    generic (WORD_SIZE : natural := 32);
     port (
-      a   : in  std_logic_vector ((DATA_WIDTH-1) downto 0);
-      b   : in  std_logic_vector ((DATA_WIDTH-1) downto 0);
-      res : out std_logic_vector ((DATA_WIDTH-1) downto 0)
+      in0, in1 : in  std_logic_vector (WORD_SIZE-1 downto 0);
+      m_out    : out std_logic_vector (WORD_SIZE-1 downto 0)
       );
   end component;
 
-  component memInstr is
-    generic (
-      WIDTH : natural := WORD_SIZE;
-      WADDR : natural := 8);
-    port (ADDRESS : in  std_logic_vector (WADDR-1 downto 0);
-          clk     : in  std_logic;
-          Q       : out std_logic_vector(WIDTH-1 downto 0));
+  component rom_rv is
+    port (
+      address : in  std_logic_vector;
+      dataout : out std_logic_vector
+      );
   end component;
 
-  component ula is
+  component ram_rv is
     port (
-      aluctl : in  std_logic_vector(3 downto 0);
+      clock   : in  std_logic;
+      we      : in  std_logic;
+      address : in  std_logic_vector;
+      datain  : in  std_logic_vector;
+      dataout : out std_logic_vector
+      );
+  end component;
+
+  component ulaRV is
+    generic (WORD_SIZE : natural := 32);
+    port (
+      opcode : in  std_logic_vector(3 downto 0);
       A, B   : in  std_logic_vector(WORD_SIZE-1 downto 0);
-      aluout : out std_logic_vector(WORD_SIZE-1 downto 0);
-      zero   : out std_logic
-      );
+      Z      : out std_logic_vector(WORD_SIZE-1 downto 0);
+      zero   : out std_logic);
   end component;
 
-  component xreg is
-    generic (
-      SIZE : natural := WORD_SIZE;
-      ADDR : natural := BREG_IDX
-      );
-    port
-      (
-        clk     : in  std_logic;
-        wren    : in  std_logic;
-        rs1     : in  std_logic_vector(ADDR-1 downto 0);
-        rs2     : in  std_logic_vector(ADDR-1 downto 0);
-        rd      : in  std_logic_vector(ADDR-1 downto 0);
-        data_in : in  std_logic_vector(SIZE-1 downto 0);
-        A       : out std_logic_vector(SIZE-1 downto 0);
-        B       : out std_logic_vector(SIZE-1 downto 0)
-        );
-
-  end component;
-
-
-  component alu_ctr is
+  component XREGS is
+    generic (WORD_SIZE : natural := 32);
     port (
-      op_alu  : in  std_logic_vector(1 downto 0);
-      funct3  : in  std_logic_vector(2 downto 0);
-      funct7  : in  std_logic;
-      alu_ctr : out std_logic_vector(3 downto 0)
-      );
+      clk, wren, rst : in  std_logic;
+      rs1, rs2, rd   : in  std_logic_vector(4 downto 0);
+      data           : in  std_logic_vector(WORD_SIZE-1 downto 0);
+      ro1, ro2       : out std_logic_vector(WORD_SIZE-1 downto 0));
   end component;
 
-  -- component control is
-  --   port (
-  --     opcode  : in  std_logic_vector(5 downto 0);
-  --     op_ula  : out std_logic_vector(1 downto 0);
-  --     reg_dst,
-  --     branch,
-  --     is_bne,
-  --     jump,
-  --     mem2reg,
-  --     mem_wr,
-  --     alu_src,
-  --     breg_wr : out std_logic
-  --     );
-  -- end component;
-
-
-  component control is
+  component controle is
     port(
       opcode     : in  std_logic_vector(6 downto 0);
       alu_op     : out std_logic_vector(1 downto 0);
@@ -197,66 +160,23 @@ package riscv_pkg is
       mem_write  : out std_logic;
       alu_src    : out std_logic;
       reg_write  : out std_logic
+    );
+  end component;
+
+  component controle_ula is
+    port(
+      alu_op : in  std_logic_vector(1 downto 0);
+      funct3  : in  std_logic_vector(2 downto 0);
+      funct7  : in  std_logic;
+      opcode : out std_logic_vector(3 downto 0)
       );
   end component;
 
   component genImm32 is
     port (
-      instr : in  std_logic_vector(WORD_SIZE - 1 downto 0);
-      imm32 : out std_logic_vector(WORD_SIZE-1 downto 0)
+      instr : in  std_logic_vector(31 downto 0);
+      imm32 : out signed (31 downto 0)
       );
   end component;
-
-  component data_mem is
-    port
-      (
-        address : in  std_logic_vector (7 downto 0);
-        clock   : in  std_logic;
-        data    : in  std_logic_vector (31 downto 0);
-        wren    : in  std_logic;
-        q       : out std_logic_vector (31 downto 0)
-        );
-  end component;
-
-  component clk_div is
-    port
-      (
-        clk   : in  std_logic;
-        clk64 : out std_logic
-        );
-
-  end component;
-
---  procedure mux2x1 (signal x0, x1 : in std_logic_vector(WORD_SIZE-1 downto 0); 
---                          signal sel  : in std_logic;
---                          signal z    : out std_logic_vector(WORD_SIZE-1 downto 0) );
-
-
-end riscv_pkg;
-
-
-package body riscv_pkg is
-
-  -- Type Declaration (optional)
-
-  -- Subtype Declaration (optional)
-
-  -- Constant Declaration (optional)
-
-  -- Function Declaration (optional)
-
-  -- Function Body (optional)
-
-  -- Procedures
-  procedure mux2x1 (signal x0, x1 : in  std_logic_vector(WORD_SIZE-1 downto 0);
-                    signal sel    : in  std_logic;
-                    signal z      : out std_logic_vector(WORD_SIZE-1 downto 0)) is
-  begin
-    if (sel = '1') then
-      z <= x1;
-    else
-      z <= x0;
-    end if;
-  end procedure;
 
 end riscv_pkg;

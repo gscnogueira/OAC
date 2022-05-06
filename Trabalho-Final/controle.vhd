@@ -3,7 +3,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use work.riscv_pkg.all;
 
-entity control is
+entity controle is
   port(
     opcode     : in  std_logic_vector(6 downto 0);
     alu_op     : out std_logic_vector(1 downto 0);
@@ -14,10 +14,10 @@ entity control is
     alu_src    : out std_logic;
     reg_write  : out std_logic
   );
-end control;
+end controle;
 
 
-architecture rtl of control is
+architecture rtl of controle is
 begin
   process(opcode)
   begin

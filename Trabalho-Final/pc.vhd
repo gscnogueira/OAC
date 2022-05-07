@@ -6,7 +6,6 @@ entity pc is
   generic(WORD_SIZE : natural := 32);
   port(
     clk   : in  std_logic;
-    wren  : in  std_logic;
     rst   : in  std_logic;
     d_in  : in  std_logic_vector(WORD_SIZE-1 downto 0);
     d_out : out std_logic_vector(WORD_SIZE-1 downto 0)
@@ -22,9 +21,7 @@ begin
     if(rst = '1') then 
       pc_value <= X"00000000";
     elsif (rising_edge(clk)) then
-      if (wren='1') then
         pc_value <= d_in;
-      end if;
     end if;
 
   end process;

@@ -13,6 +13,6 @@ end entity;
 architecture rtl of mux_lui is
     signal aux: std_logic_vector(31 downto 0);
   begin
-    aux <= a1(19 downto 0) & X"000";
+    aux <= in0(19 downto 0) & X"000";
     m_out <= aux when (sel = '1') else in1;
 end rtl;

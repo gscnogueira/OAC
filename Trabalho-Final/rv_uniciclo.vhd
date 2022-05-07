@@ -39,20 +39,20 @@ architecture rtl of rv_uniciclo is
   signal imm32 : signed(31 downto 0);
 
   -- Registradores
-  signal rs1, rs2, rd : std_logic_vector(4 downto 0);
-  signal ro1, ro2     : std_logic_vector(WORD_SIZE-1 downto 0);
+  signal rs1, rs2, rd : std_logic_vector(4 downto 0):=(others=>'0');
+  signal ro1, ro2     : std_logic_vector(WORD_SIZE-1 downto 0):=(others =>'0');
 
   -- Memoria
-  signal ram_address : std_logic_vector(IMEM_ADDR-1 downto 0);
-  signal ram_datain  : std_logic_vector(WORD_SIZE-1 downto 0);
-  signal ram_dataout : std_logic_vector(WORD_SIZE-1 downto 0);
-  signal rom_address : std_logic_vector(IMEM_ADDR-1 downto 0);
-  signal rom_dataout : std_logic_vector(WORD_SIZE-1 downto 0);
+  signal ram_address : std_logic_vector(IMEM_ADDR-1 downto 0):=(others =>'0');
+  signal ram_datain  : std_logic_vector(WORD_SIZE-1 downto 0):=(others =>'0');
+  signal ram_dataout : std_logic_vector(WORD_SIZE-1 downto 0):=(others =>'0');
+  signal rom_address : std_logic_vector(IMEM_ADDR-1 downto 0):=(others =>'0');
+  signal rom_dataout : std_logic_vector(WORD_SIZE-1 downto 0):=(others =>'0');
 
 
   -- ULA
-  signal entradaB_ula : std_logic_vector(WORD_SIZE-1 downto 0);
-  signal saida_ula    : std_logic_vector(WORD_SIZE-1 downto 0);
+  signal entradaB_ula : std_logic_vector(WORD_SIZE-1 downto 0):=(others =>'0');
+  signal saida_ula    : std_logic_vector(WORD_SIZE-1 downto 0):= (others =>'0') ;
   signal zero         : std_logic;
   signal ula_opcode   : std_logic_vector(3 downto 0);
 
@@ -71,7 +71,7 @@ begin
 
   mux1 : mux_2 port map(escolhe_pc, pc_inc, pc_salto, pc_in);
 
-  rom : rom_rv port map(pc_out(11 downto 0), rom_dataout);
+  rom : rom_rv port map(pc_out(11 downto 2), rom_dataout);
   opcode <= rom_dataout(6 downto 0);
   rd     <= rom_dataout(11 downto 7);
   rs1    <= rom_dataout(19 downto 15);
@@ -90,7 +90,7 @@ begin
 
   ula : ulaRV port map(ula_opcode, ro1, entradaB_ula, saida_ula, zero);
 
-  ram : ram_rv port map(clk, mem_write, saida_ula, ro2, ram_dataout);
+  ram : ram_rv port map(clk, mem_write, saida_ula(11 downto 0), ro2, ram_dataout);
 
   mux3 : mux_2 port map(mem_to_reg, saida_ula, ram_dataout, data);
 

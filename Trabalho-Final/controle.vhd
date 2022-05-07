@@ -55,7 +55,7 @@ begin
         mem_read   <= '0';
         mem_to_reg <= '0';
         mem_write  <= '0';
-        alu_src    <= '1';
+        alu_src    <= '0';
         reg_write  <= '0';
         lui        <= '0';
         auipc      <= '0';

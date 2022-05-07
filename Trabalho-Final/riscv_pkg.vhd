@@ -98,7 +98,6 @@ package riscv_pkg is
   end component;
 
   component mux_2 is
-    generic (WORD_SIZE : natural := 32);
     port (
       sel      : in  std_logic;
       in0, in1 : in  std_logic_vector(WORD_SIZE-1 downto 0);
@@ -107,7 +106,6 @@ package riscv_pkg is
   end component;
 
   component adder is
-    generic (WORD_SIZE : natural := 32);
     port (
       in0, in1 : in  std_logic_vector (WORD_SIZE-1 downto 0);
       m_out    : out std_logic_vector (WORD_SIZE-1 downto 0)
@@ -132,7 +130,6 @@ package riscv_pkg is
   end component;
 
   component ulaRV is
-    generic (WORD_SIZE : natural := 32);
     port (
       opcode : in  std_logic_vector(3 downto 0);
       A, B   : in  std_logic_vector(WORD_SIZE-1 downto 0);
@@ -141,7 +138,6 @@ package riscv_pkg is
   end component;
 
   component XREGS is
-    generic (WORD_SIZE : natural := 32);
     port (
       clk, wren, rst : in  std_logic;
       rs1, rs2, rd   : in  std_logic_vector(4 downto 0);

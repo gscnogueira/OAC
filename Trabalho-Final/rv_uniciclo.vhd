@@ -71,7 +71,7 @@ begin
 
   mux1 : mux_2 port map(escolhe_pc, pc_inc, pc_salto, pc_in);
 
-  rom : rom_rv port map(pc_out, rom_dataout);
+  rom : rom_rv port map(pc_out(11 downto 0), rom_dataout);
   opcode <= rom_dataout(6 downto 0);
   rd     <= rom_dataout(11 downto 7);
   rs1    <= rom_dataout(19 downto 15);

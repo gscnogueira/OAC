@@ -15,8 +15,9 @@ entity controle is
     reg_write  : out std_logic;
     lui        : out std_logic;
     auipc      : out std_logic;
-    jal        : out std_logic
-  );
+    jal        : out std_logic;
+    jalr       : out std_logic
+    );
 end controle;
 
 
@@ -25,7 +26,7 @@ begin
   process(opcode)
   begin
     case opcode is
-      when iRType  =>
+      when iRType =>
         alu_op     <= "01";
         branch     <= '0';
         mem_read   <= '0';
@@ -36,8 +37,9 @@ begin
         lui        <= '0';
         auipc      <= '0';
         jal        <= '0';
+        jalr       <= '0';
 
-      when iIType  =>
+      when iIType =>
         alu_op     <= "01";
         branch     <= '0';
         mem_read   <= '0';
@@ -48,8 +50,9 @@ begin
         lui        <= '0';
         auipc      <= '0';
         jal        <= '0';
+        jalr       <= '0';
 
-      when iBType  =>
+      when iBType =>
         alu_op     <= "10";
         branch     <= '1';
         mem_read   <= '0';
@@ -60,6 +63,7 @@ begin
         lui        <= '0';
         auipc      <= '0';
         jal        <= '0';
+        jalr       <= '0';
 
       when iILType =>
         alu_op     <= "00";
@@ -72,8 +76,9 @@ begin
         lui        <= '0';
         auipc      <= '0';
         jal        <= '0';
+        jalr       <= '0';
 
-      when iSType  =>
+      when iSType =>
         alu_op     <= "00";
         branch     <= '0';
         mem_read   <= '0';
@@ -84,8 +89,9 @@ begin
         lui        <= '0';
         auipc      <= '0';
         jal        <= '0';
+        jalr       <= '0';
 
-      when iLUI    =>
+      when iLUI =>
         alu_op     <= "00";
         branch     <= '0';
         mem_read   <= '0';
@@ -96,8 +102,9 @@ begin
         lui        <= '1';
         auipc      <= '0';
         jal        <= '0';
+        jalr       <= '0';
 
-      when iAUIPC  =>
+      when iAUIPC =>
         alu_op     <= "00";
         branch     <= '0';
         mem_read   <= '0';
@@ -108,12 +115,35 @@ begin
         lui        <= '0';
         auipc      <= '1';
         jal        <= '0';
+        jalr       <= '0';
 
-      -- when iJALR   =>
+      when iJAL =>
+        alu_op     <= "00";
+        branch     <= '0';
+        mem_read   <= '0';
+        mem_to_reg <= '0';
+        mem_write  <= '0';
+        alu_src    <= '0';
+        reg_write  <= '1';
+        lui        <= '0';
+        auipc      <= '0';
+        jal        <= '1';
+        jalr       <= '0';
 
-      -- when iJAL    =>
+      when iJALR =>
+        alu_op     <= "00";
+        branch     <= '0';
+        mem_read   <= '0';
+        mem_to_reg <= '0';
+        mem_write  <= '0';
+        alu_src    <= '1';
+        reg_write  <= '1';
+        lui        <= '0';
+        auipc      <= '0';
+        jal        <= '0';
+        jalr       <= '1';
 
-      when others  =>
+      when others =>
         alu_op     <= "--";
         branch     <= '0';
         mem_read   <= '0';

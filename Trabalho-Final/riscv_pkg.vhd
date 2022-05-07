@@ -84,7 +84,7 @@ package riscv_pkg is
       clk_rom : in  std_logic;
       rst     : in  std_logic;
       data    : out std_logic_vector(WORD_SIZE-1 downto 0)
-    );
+      );
   end component;
 
   component pc is
@@ -94,7 +94,7 @@ package riscv_pkg is
       rst   : in  std_logic;
       d_in  : in  std_logic_vector(WORD_SIZE-1 downto 0);
       d_out : out std_logic_vector(WORD_SIZE-1 downto 0)
-    );
+      );
   end component;
 
   component mux_2 is
@@ -154,15 +154,19 @@ package riscv_pkg is
       mem_to_reg : out std_logic;
       mem_write  : out std_logic;
       alu_src    : out std_logic;
-      reg_write  : out std_logic
-    );
+      reg_write  : out std_logic;
+      lui        : out std_logic;
+      auipc      : out std_logic;
+      jal        : out std_logic;
+      jalr       : out std_logic
+      );
   end component;
 
   component controle_ula is
     port(
       alu_op : in  std_logic_vector(1 downto 0);
-      funct3  : in  std_logic_vector(2 downto 0);
-      funct7  : in  std_logic;
+      funct3 : in  std_logic_vector(2 downto 0);
+      funct7 : in  std_logic;
       opcode : out std_logic_vector(3 downto 0)
       );
   end component;
@@ -174,7 +178,7 @@ package riscv_pkg is
       );
   end component;
 
-  component mux_lui is
+  component mux_lui_auipc is
     port (
       lui, auipc    : in  std_logic;
       imm, pc, data : in  std_logic_vector(31 downto 0);

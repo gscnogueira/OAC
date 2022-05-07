@@ -174,4 +174,12 @@ package riscv_pkg is
       );
   end component;
 
+  component mux_lui is
+    port (
+      lui, auipc    : in  std_logic;
+      imm, pc, data : in  std_logic_vector(31 downto 0);
+      m_out         : out std_logic_vector(31 downto 0)
+      );
+  end component;
+
 end riscv_pkg;

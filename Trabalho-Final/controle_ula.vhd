@@ -9,8 +9,8 @@ use work.riscv_pkg.all;
 entity controle_ula is
   port(
     alu_op : in  std_logic_vector(1 downto 0);
-    funct3  : in  std_logic_vector(2 downto 0);
-    funct7  : in  std_logic;
+    funct3 : in  std_logic_vector(2 downto 0);
+    funct7 : in  std_logic;
     opcode : out std_logic_vector(3 downto 0));
 end entity controle_ula;
 
@@ -25,7 +25,8 @@ begin
           when (iAND3)   => opcode <= ULA_AND;
           when (iOR3)    => opcode <= ULA_OR;
           when (iXOR3)   => opcode <= ULA_XOR;
-          when (iSLTI3)  => opcode <= ULA_SLL;
+          when (iSLL3)   => opcode <= ULA_SLL;
+          when (iSLTI3)  => opcode <= ULA_SLT;
           when (iSLTIU3) => opcode <= ULA_SLTU;
           when iADDSUB3 =>
             if(funct7 = iSUB7) then
@@ -49,7 +50,7 @@ begin
           when (iBLTU3) => opcode <= ULA_SLTU;
           when (iBGE3)  => opcode <= ULA_SGE;
           when (iBGEU3) => opcode <= ULA_SGEU;
-          when others => opcode <= ULA_ADD;
+          when others   => opcode <= ULA_ADD;
         end case;
       when others => opcode <= ULA_ADD;
     end case;

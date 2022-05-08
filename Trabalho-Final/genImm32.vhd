@@ -40,7 +40,7 @@ begin
     when "0110111",
     -- UJ-Type:
     resize(signed(instr(31) & instr(19 downto 12) & instr(20) & instr(30 downto 21) & '0'), imm32'length)
-    when "1101111",
+    when "0010111",
     -- Unknown:
     resize("0", imm32'length) when others;
 

@@ -35,7 +35,7 @@ package riscv_pkg is
   constant iOR3     : std_logic_vector(2 downto 0) := "110";
   constant iSLTI3   : std_logic_vector(2 downto 0) := "010";
   constant iAND3    : std_logic_vector(2 downto 0) := "111";
-  constant iSLTIU3  : std_logic_vector(2 downto 0) := "001";
+  constant iSLTIU3  : std_logic_vector(2 downto 0) := "011";
   constant iSR3     : std_logic_vector(2 downto 0) := "101";
   constant iBEQ3    : std_logic_vector(2 downto 0) := "000";
   constant iBNE3    : std_logic_vector(2 downto 0) := "001";

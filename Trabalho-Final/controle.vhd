@@ -140,7 +140,7 @@ begin
         reg_write  <= '1';
         lui        <= '0';
         auipc      <= '0';
-        jal        <= '0';
+        jal        <= '1';
         jalr       <= '1';
 
       when others =>

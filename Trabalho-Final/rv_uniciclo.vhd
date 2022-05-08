@@ -76,13 +76,14 @@ begin
 
   adder1 : adder port map(pc_out, x"00000004", pc_inc);
 
-  mux0 : mux_2 port map(jalr, std_logic_vector(imm32), saida_ula, mux0_out);
+  adder2 : adder port map(pc_out, std_logic_vector(imm32), pc_salto);
 
-  adder2 : adder port map(pc_out, mux0_out, pc_salto);
 
   escolhe_pc <= (branch and not(zero)) or jal;
 
-  mux1 : mux_2 port map(escolhe_pc, pc_inc, pc_salto, pc_in);
+  mux0 : mux_2 port map(escolhe_pc, pc_inc, pc_salto, mux0_out);
+
+  mux1 : mux_2 port map(jalr, mux0_out, saida_ula, pc_in);
 
   rom : rom_rv port map(pc_out(11 downto 2), rom_dataout);
   opcode <= rom_dataout(6 downto 0);

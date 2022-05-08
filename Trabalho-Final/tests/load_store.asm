@@ -1,13 +1,12 @@
 .text
-	addi t0, zero, 8
-	addi t1, zero, 7
+	addi a0, zero, 8
+	addi a1, zero, 7
 	
-	sw t1, (t0)
-	lw t2, (t0)
-	
-	
-	sw t1, 4(t0)
-	lw t2, 4(t0)
+	sw a1, (a0)
+	lw a2, (a0)
+
+	sw a1, 4(a0)
+	lw a3, 4(a0)
 
 loop:
 	beq zero, zero, loop

@@ -37,10 +37,10 @@ begin
     when "1100011",
     -- U-Type:
     resize(signed(instr(31 downto 12) & x"000"), imm32'length)
-    when "0110111",
+    when "0110111" |"0010111" ,
     -- UJ-Type:
     resize(signed(instr(31) & instr(19 downto 12) & instr(20) & instr(30 downto 21) & '0'), imm32'length)
-    when "0010111",
+    when "1101111",
     -- Unknown:
     resize("0", imm32'length) when others;
 

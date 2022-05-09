@@ -100,7 +100,7 @@ begin
 
   mux2 : mux_2 port map(alu_src, ro2, std_logic_vector(imm32), entradaB_ula);
 
-  ctr_ula : controle_ula port map(alu_op, funct3, funct7, ula_opcode);
+  ctr_ula : controle_ula port map(alu_op, funct3, funct7, opcode(5), ula_opcode);
 
   ula : ulaRV port map(ula_opcode, ro1, entradaB_ula, saida_ula, zero);
 

@@ -8,10 +8,11 @@ use work.riscv_pkg.all;
 
 entity controle_ula is
   port(
-    alu_op : in  std_logic_vector(1 downto 0);
-    funct3 : in  std_logic_vector(2 downto 0);
-    funct7 : in  std_logic;
-    opcode : out std_logic_vector(3 downto 0));
+    alu_op    : in  std_logic_vector(1 downto 0);
+    funct3    : in  std_logic_vector(2 downto 0);
+    funct7    : in  std_logic;
+    is_r_type : in  std_logic;
+    opcode    : out std_logic_vector(3 downto 0));
 end entity controle_ula;
 
 architecture rtl of controle_ula is
@@ -29,7 +30,7 @@ begin
           when (iSLTI3)  => opcode <= ULA_SLT;
           when (iSLTIU3) => opcode <= ULA_SLTU;
           when iADDSUB3 =>
-            if(funct7 = iSUB7) then
+            if(funct7 = iSUB7 and is_r_type = '1') then
               opcode <= ULA_SUB;
             else
               opcode <= ULA_ADD;
